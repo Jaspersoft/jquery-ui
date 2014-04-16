@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Resizable @VERSION
+ * jQuery UI Resizable 1.10.4
  * http://jqueryui.com
  *
  * Copyright 2014 jQuery Foundation and other contributors
@@ -24,7 +24,7 @@ function isNumber(value) {
 }
 
 $.widget("ui.resizable", $.ui.mouse, {
-	version: "@VERSION",
+	version: "1.10.4",
 	widgetEventPrefix: "resize",
 	options: {
 		alsoResize: false,
@@ -178,8 +178,16 @@ $.widget("ui.resizable", $.ui.mouse, {
 		//TODO: make renderAxis a prototype function
 		this._renderAxis(this.element);
 
-		this._handles = $(".ui-resizable-handle", this.element)
-			.disableSelection();
+        this._handles = $(".ui-resizable-handle", this.element);
+
+        //Add the custom handles of jquery Objects outside this.element
+        for (i in this.handles) {
+
+            this._handles = this._handles.add(this.handles[i]);
+
+        }
+
+		this._handles.disableSelection();
 
 		//Matching axis name
 		this._handles.mouseover(function() {
@@ -217,7 +225,18 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		//Initialize the mouse interaction
 		this._mouseInit();
-
+        //Bind the mousedown event directly in the custom jquery elements
+        if (o.handles.constructor !== String) {
+            for (i in o.handles) {
+                handle = o.handles[i];
+                if (handle instanceof $) {
+                    handle.bind("mousedown." + this.widgetName, onMouseDownCustom);
+                }
+            }
+        }
+        function onMouseDownCustom(event) {
+            return that._mouseDown(event);
+        }
 	},
 
 	_destroy: function() {
