@@ -2009,8 +2009,9 @@ $.fn.datepicker = function(options){
 	}
 
 	/* Append datepicker main container to body if not exist. */
+    // JASPER patch. wrap datepicker by div with class visualizejs for embedding
 	if ($("#"+$.datepicker._mainDivId).length === 0) {
-		$("body").append($.datepicker.dpDiv);
+        $("body").append($("<div class='visualizejs'></div>").append($.datepicker.dpDiv));
 	}
 
 	var otherArgs = Array.prototype.slice.call(arguments, 1);
