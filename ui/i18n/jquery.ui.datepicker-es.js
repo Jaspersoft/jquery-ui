@@ -1,20 +1,25 @@
-/* Inicialización en español para la extensión 'UI date picker' para jQuery. */
-/* Traducido por Vester (xvester@gmail.com). */
+/*
+ * This file is used by Jaspersoft under the MIT license.
+ *
+ * The origin of this file is from the JQuery project:
+ *
+ * https://github.com/jquery/jquery-ui/tree/master/ui/i18n
+ */
 jQuery(function($){
 	$.datepicker.regional['es'] = {
 		closeText: 'Cerrar',
-		prevText: '&#x3C;Ant',
-		nextText: 'Sig&#x3E;',
+		prevText: '&#x3c;Ant',
+		nextText: 'Sig&#x3e;',
 		currentText: 'Hoy',
-		monthNames: ['enero','febrero','marzo','abril','mayo','junio',
-		'julio','agosto','septiembre','octubre','noviembre','diciembre'],
-		monthNamesShort: ['ene','feb','mar','abr','may','jun',
-		'jul','ogo','sep','oct','nov','dic'],
-		dayNames: ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'],
-		dayNamesShort: ['dom','lun','mar','mié','juv','vie','sáb'],
-		dayNamesMin: ['D','L','M','X','J','V','S'],
+		monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+		'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+		monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+		'Jul','Ago','Sep','Oct','Nov','Dic'],
+		dayNames: ['Domingo','Lunes','Martes','Mi&eacute;rcoles','Jueves','Viernes','S&aacute;bado'],
+		dayNamesShort: ['Dom','Lun','Mar','Mi&eacute;','Juv','Vie','S&aacute;b'],
+		dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','S&aacute;'],
 		weekHeader: 'Sm',
-		dateFormat: 'dd/mm/yy',
+		dateFormat: 'mm-dd-yy',
 		firstDay: 1,
 		isRTL: false,
 		showMonthAfterYear: false,
