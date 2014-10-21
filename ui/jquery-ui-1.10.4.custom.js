@@ -2451,7 +2451,10 @@ define(function (require) {
 					for (i in this.handles) {
 
 						if (this.handles[i].constructor === String) {
-							this.handles[i] = $(this.handles[i], this.element).show();
+							// this.handles[i] = $(this.handles[i], this.element).show(); - prev line.
+							//Fixing resizable in resizable problem.
+							// Outer resizable working incorrectly if inner resizable was initialized first.
+							this.handles[i] = $(this.handles[i] + ':last', this.element).show();
 						}
 
 						//Apply pad to wrapper element, needed to fix axis position (textarea, inputs, scrolls)
