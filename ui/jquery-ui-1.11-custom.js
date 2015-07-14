@@ -16612,6 +16612,6 @@ var tooltip = $.widget( "ui.tooltip", {
 	}
 });
 
-
+	return jQuery;
 
 }));
