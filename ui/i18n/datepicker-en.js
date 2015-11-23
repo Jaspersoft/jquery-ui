@@ -12,7 +12,7 @@
 	}
 }(function( datepicker ) {
 
-datepicker.regional['en-GB'] = {
+datepicker.regional['en'] = {
 	closeText: 'Done',
 	prevText: 'Prev',
 	nextText: 'Next',
@@ -30,8 +30,8 @@ datepicker.regional['en-GB'] = {
 	isRTL: false,
 	showMonthAfterYear: false,
 	yearSuffix: ''};
-datepicker.setDefaults(datepicker.regional['en-GB']);
+datepicker.setDefaults(datepicker.regional['en']);
 
-return datepicker.regional['en-GB'];
+return datepicker.regional['en'];
 
 }));
