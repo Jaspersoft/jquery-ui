@@ -13,7 +13,21 @@
  *	jquery.ui.mouse.js
  *	jquery.ui.widget.js
  */
-(function( $, undefined ) {
+///////////////////////////////////////////////////////////////////////
+//Jaspersoft Updates (look for comment: JASPERSOFT #x)
+///////////////////////////////////////////////////////////////////////
+// JASPERSOFT #1 add AMD-wrapper to head
+// JASPERSOFT #2 add AMD-wrapper to bottom
+///////////////////////////////////////////////////////////////////////
+
+//JASPERSOFT #1
+define(function(require) {
+
+	require("./jquery.ui.core");
+	require("./jquery.ui.mouse");
+
+	var $ = require("./jquery.ui.widget");
+//JASPERSOFT #1 END
 
 function isOverAxis( x, reference, size ) {
 	return ( x > reference ) && ( x < ( reference + size ) );
@@ -1285,5 +1299,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 	}
 
 });
-
-})(jQuery);
+//JASPERSOFT #2
+	return $;
+});
+//JASPERSOFT #2 END

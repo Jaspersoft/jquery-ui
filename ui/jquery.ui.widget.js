@@ -8,9 +8,21 @@
  *
  * http://api.jqueryui.com/jQuery.widget/
  */
-(function( $, undefined ) {
 
-var uuid = 0,
+///////////////////////////////////////////////////////////////////////
+//Jaspersoft Updates (look for comment: JASPERSOFT #x)
+///////////////////////////////////////////////////////////////////////
+// JASPERSOFT #1 add AMD-wrapper to head
+// JASPERSOFT #2 add AMD-wrapper to bottom
+///////////////////////////////////////////////////////////////////////
+
+//JASPERSOFT #1
+define(function(require) {
+
+	var $ = require("./jquery.ui.core");
+//JASPERSOFT #1 END
+
+	var uuid = 0,
 	slice = Array.prototype.slice,
 	_cleanData = $.cleanData;
 $.cleanData = function( elems ) {
@@ -517,5 +529,7 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 		}
 	};
 });
-
-})( jQuery );
+//JASPERSOFT #2
+	return $;
+});
+//JASPERSOFT #2 END

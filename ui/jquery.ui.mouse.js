@@ -11,7 +11,20 @@
  * Depends:
  *	jquery.ui.widget.js
  */
-(function( $, undefined ) {
+
+///////////////////////////////////////////////////////////////////////
+//Jaspersoft Updates (look for comment: JASPERSOFT #x)
+///////////////////////////////////////////////////////////////////////
+// JASPERSOFT #1 add AMD-wrapper to head
+// JASPERSOFT #2 add AMD-wrapper to bottom
+///////////////////////////////////////////////////////////////////////
+
+//JASPERSOFT #1
+define(function(require) {
+
+	var $ = require("./jquery.ui.widget");
+//JASPERSOFT #1 END
+
 
 var mouseHandled = false;
 $( document ).mouseup( function() {
@@ -166,4 +179,7 @@ $.widget("ui.mouse", {
 	_mouseCapture: function(/* event */) { return true; }
 });
 
-})(jQuery);
+//JASPERSOFT #2
+	return $;
+});
+//JASPERSOFT #2 END

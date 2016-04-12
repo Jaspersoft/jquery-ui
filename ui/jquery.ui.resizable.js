@@ -13,7 +13,23 @@
  *	jquery.ui.mouse.js
  *	jquery.ui.widget.js
  */
-(function( $, undefined ) {
+
+///////////////////////////////////////////////////////////////////////
+//Jaspersoft Updates (look for comment: JASPERSOFT #x)
+///////////////////////////////////////////////////////////////////////
+// JASPERSOFT #1 add AMD-wrapper to head
+// JASPERSOFT #2 add AMD-wrapper to bottom
+///////////////////////////////////////////////////////////////////////
+
+//JASPERSOFT #1
+define(function(require) {
+
+	require("./jquery.ui.core");
+	require("./jquery.ui.mouse");
+
+	var $ = require("./jquery.ui.widget");
+//JASPERSOFT #1 END
+
 
 function num(v) {
 	return parseInt(v, 10) || 0;
@@ -993,5 +1009,7 @@ $.ui.plugin.add("resizable", "grid", {
 	}
 
 });
-
-})(jQuery);
+//JASPERSOFT #2
+	return $;
+});
+//JASPERSOFT #2 END

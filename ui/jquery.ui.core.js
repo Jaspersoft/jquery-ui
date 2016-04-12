@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Core @VERSION
+ * jQuery UI Core 1.10.4
  * http://jqueryui.com
  *
  * Copyright 2014 jQuery Foundation and other contributors
@@ -8,7 +8,19 @@
  *
  * http://api.jqueryui.com/category/ui-core/
  */
-(function( $, undefined ) {
+
+///////////////////////////////////////////////////////////////////////
+//Jaspersoft Updates (look for comment: JASPERSOFT #x)
+///////////////////////////////////////////////////////////////////////
+// JASPERSOFT #1 add AMD-wrapper to head
+// JASPERSOFT #2 add AMD-wrapper to bottom
+///////////////////////////////////////////////////////////////////////
+
+//JASPERSOFT #1
+define(function(require) {
+
+	var $ = require("jquery");
+//JASPERSOFT #1 END
 
 var uuid = 0,
 	runiqueId = /^ui-id-\d+$/;
@@ -17,7 +29,7 @@ var uuid = 0,
 $.ui = $.ui || {};
 
 $.extend( $.ui, {
-	version: "@VERSION",
+	version: "1.10.4",
 
 	keyCode: {
 		BACKSPACE: 8,
@@ -316,5 +328,8 @@ $.extend( $.ui, {
 		return has;
 	}
 });
+//JASPERSOFT #2
+	return $;
 
-})( jQuery );
+});
+//JASPERSOFT #2 END
