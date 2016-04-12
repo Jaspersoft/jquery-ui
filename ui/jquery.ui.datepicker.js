@@ -15,11 +15,19 @@
 ///////////////////////////////////////////////////////////////////////
 //Jaspersoft Updates (look for comment: JASPERSOFT #x)
 ///////////////////////////////////////////////////////////////////////
-// JASPERSOFT #1 make datepicker's mainDivId more-less uniq, to play well on third-party pages
-//
+// JASPERSOFT #1 add AMD-wrapper to head
+// JASPERSOFT #2 add AMD-wrapper to bottom
+// JASPERSOFT #3 make datepicker's mainDivId more-less uniq, to play well on third-party pages
 ///////////////////////////////////////////////////////////////////////
 
-(function( $, undefined ) {
+//JASPERSOFT #1
+define(function(require) {
+
+		require("./jquery.ui.core");
+		require("./jquery.ui.mouse");
+
+		var $ = require("./jquery.ui.widget");
+//JASPERSOFT #1 END
 
 $.extend($.ui, { datepicker: { version: "1.10.4" } });
 
@@ -37,9 +45,9 @@ function Datepicker() {
 	this._disabledInputs = []; // List of date picker inputs that have been disabled
 	this._datepickerShowing = false; // True if the popup picker is showing , false if not
 	this._inDialog = false; // True if showing within a "dialog", false if not
-	//JASPERSOFT #1
+	//JASPERSOFT #3
 	this._mainDivId = "jr-ui-datepicker-div-1-10-4"; // The ID of the main datepicker division
-	//JASPERSOFT #1 END
+	//JASPERSOFT #3 END
 	this._inlineClass = "ui-datepicker-inline"; // The name of the inline marker class
 	this._appendClass = "ui-datepicker-append"; // The name of the append marker class
 	this._triggerClass = "ui-datepicker-trigger"; // The name of the trigger marker class
