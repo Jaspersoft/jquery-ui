@@ -2053,4 +2053,8 @@ $.datepicker.initialized = false;
 $.datepicker.uuid = new Date().getTime();
 $.datepicker.version = "1.10.4";
 
-})(jQuery);
+
+//JASPERSOFT #2
+return $;
+});
+//JASPERSOFT #2 END
