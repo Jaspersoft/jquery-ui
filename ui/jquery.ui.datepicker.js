@@ -126,7 +126,7 @@ function Datepicker() {
 		disabled: false // The initial disabled state
 	};
 	$.extend(this._defaults, this.regional[""]);
-	this.dpDiv = bindHover($("<div id='" + this._mainDivId + "' class='ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all jr'></div>"));
+	this.dpDiv = bindHover($("<div id='" + this._mainDivId + "' class='jr-jDatepickerPopupContainer ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all jr'></div>"));
 }
 
 $.extend(Datepicker.prototype, {
