@@ -12,7 +12,20 @@
  *	jquery.ui.core.js
  *	jquery.ui.widget.js
  */
-(function( $, undefined ) {
+///////////////////////////////////////////////////////////////////////
+//Jaspersoft Updates (look for comment: JASPERSOFT #x)
+///////////////////////////////////////////////////////////////////////
+// JASPERSOFT #1 add AMD-wrapper to head
+// JASPERSOFT #2 add AMD-wrapper to bottom
+///////////////////////////////////////////////////////////////////////
+
+//JASPERSOFT #1
+define(function(require) {
+
+		require("./jquery.ui.core");
+
+		var $ = require("./jquery.ui.widget");
+//JASPERSOFT #1 END
 
 var tabId = 0,
 	rhash = /#.*$/;
@@ -846,4 +859,9 @@ $.widget( "ui.tabs", {
 	}
 });
 
-})( jQuery );
+
+//JASPERSOFT #2
+		return $;
+});
+//JASPERSOFT #2 END
+

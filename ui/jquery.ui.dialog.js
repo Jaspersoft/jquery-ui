@@ -820,4 +820,7 @@ if ( $.uiBackCompat !== false ) {
 	});
 }
 
-}( jQuery ) );
+//JASPERSOFT #2
+		return $;
+});
+//JASPERSOFT #2 END

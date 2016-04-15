@@ -14,7 +14,22 @@
  *	jquery.ui.position.js
  *	jquery.ui.menu.js
  */
-(function( $, undefined ) {
+///////////////////////////////////////////////////////////////////////
+//Jaspersoft Updates (look for comment: JASPERSOFT #x)
+///////////////////////////////////////////////////////////////////////
+// JASPERSOFT #1 add AMD-wrapper to head
+// JASPERSOFT #2 add AMD-wrapper to bottom
+///////////////////////////////////////////////////////////////////////
+
+//JASPERSOFT #1
+define(function(require) {
+
+		require("./jquery.ui.core");
+		require("./jquery.ui.widget");
+		require("./jquery.ui.position");
+
+		var $ = require("./jquery.ui.menu");
+//JASPERSOFT #1 END
 
 $.widget( "ui.autocomplete", {
 	version: "@VERSION",
@@ -603,4 +618,7 @@ $.widget( "ui.autocomplete", $.ui.autocomplete, {
 	}
 });
 
-}( jQuery ));
+//JASPERSOFT #2
+		return $;
+});
+//JASPERSOFT #2 END

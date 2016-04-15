@@ -13,7 +13,21 @@
  *  jquery.ui.widget.js
  *  jquery.ui.button.js
  */
-(function( $ ) {
+///////////////////////////////////////////////////////////////////////
+//Jaspersoft Updates (look for comment: JASPERSOFT #x)
+///////////////////////////////////////////////////////////////////////
+// JASPERSOFT #1 add AMD-wrapper to head
+// JASPERSOFT #2 add AMD-wrapper to bottom
+///////////////////////////////////////////////////////////////////////
+
+//JASPERSOFT #1
+define(function(require) {
+
+		require("./jquery.ui.core");
+		require("./jquery.ui.widget");
+
+		var $ = require("./jquery.ui.button");
+//JASPERSOFT #1 END
 
 function modifier( fn ) {
 	return function() {
@@ -494,4 +508,7 @@ $.widget( "ui.spinner", {
 	}
 });
 
-}( jQuery ) );
+//JASPERSOFT #2
+		return $;
+});
+//JASPERSOFT #2 END

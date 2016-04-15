@@ -12,7 +12,20 @@
  *   jquery.ui.core.js
  *   jquery.ui.widget.js
  */
-(function( $, undefined ) {
+///////////////////////////////////////////////////////////////////////
+//Jaspersoft Updates (look for comment: JASPERSOFT #x)
+///////////////////////////////////////////////////////////////////////
+// JASPERSOFT #1 add AMD-wrapper to head
+// JASPERSOFT #2 add AMD-wrapper to bottom
+///////////////////////////////////////////////////////////////////////
+
+//JASPERSOFT #1
+define(function(require) {
+
+		require("./jquery.ui.core");
+
+		var $ = require("./jquery.ui.widget");
+//JASPERSOFT #1 END
 
 $.widget( "ui.progressbar", {
 	version: "@VERSION",
@@ -142,4 +155,9 @@ $.widget( "ui.progressbar", {
 	}
 });
 
-})( jQuery );
+
+//JASPERSOFT #2
+		return $;
+});
+//JASPERSOFT #2 END
+

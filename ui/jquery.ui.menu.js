@@ -13,7 +13,21 @@
  *	jquery.ui.widget.js
  *	jquery.ui.position.js
  */
-(function( $, undefined ) {
+///////////////////////////////////////////////////////////////////////
+//Jaspersoft Updates (look for comment: JASPERSOFT #x)
+///////////////////////////////////////////////////////////////////////
+// JASPERSOFT #1 add AMD-wrapper to head
+// JASPERSOFT #2 add AMD-wrapper to bottom
+///////////////////////////////////////////////////////////////////////
+
+//JASPERSOFT #1
+define(function(require) {
+
+		require("./jquery.ui.core");
+		require("./jquery.ui.widget");
+
+		var $ = require("./jquery.ui.position");
+//JASPERSOFT #1 END
 
 $.widget( "ui.menu", {
 	version: "@VERSION",
@@ -624,4 +638,7 @@ $.widget( "ui.menu", {
 	}
 });
 
-}( jQuery ));
+//JASPERSOFT #2
+		return $;
+});
+//JASPERSOFT #2 END

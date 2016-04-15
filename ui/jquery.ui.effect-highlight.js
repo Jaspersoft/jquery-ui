@@ -11,8 +11,18 @@
  * Depends:
  *	jquery.ui.effect.js
  */
-(function( $, undefined ) {
+///////////////////////////////////////////////////////////////////////
+//Jaspersoft Updates (look for comment: JASPERSOFT #x)
+///////////////////////////////////////////////////////////////////////
+// JASPERSOFT #1 add AMD-wrapper to head
+// JASPERSOFT #2 add AMD-wrapper to bottom
+///////////////////////////////////////////////////////////////////////
 
+//JASPERSOFT #1
+define(function(require) {
+
+		var $ = require("./jquery.ui.effect");
+//JASPERSOFT #1 END
 $.effects.effect.highlight = function( o, done ) {
 	var elem = $( this ),
 		props = [ "backgroundImage", "backgroundColor", "opacity" ],
@@ -47,4 +57,8 @@ $.effects.effect.highlight = function( o, done ) {
 		});
 };
 
-})(jQuery);
+//JASPERSOFT #2
+		return $;
+});
+//JASPERSOFT #2 END
+
