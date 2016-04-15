@@ -17,7 +17,9 @@
 ///////////////////////////////////////////////////////////////////////
 // JASPERSOFT #1 add AMD-wrapper to head
 // JASPERSOFT #2 add AMD-wrapper to bottom
-// JASPERSOFT #3 make datepicker's mainDivId more-less uniq, to play well on third-party pages
+// JASPERSOFT #3 make datepicker's mainDivId more-less uniq, to play well on third-party pages and push or classes to popup container
+// JASPERSOFT #4 puch our classes to inline instance
+// JASPERSOFT #5 increase zIndex becuase we have problems with JIVE filters dialog and Dashboard's dialog dimmer
 ///////////////////////////////////////////////////////////////////////
 
 //JASPERSOFT #1
@@ -47,6 +49,8 @@ function Datepicker() {
 	this._inDialog = false; // True if showing within a "dialog", false if not
 	//JASPERSOFT #3
 	this._mainDivId = "jr-ui-datepicker-div-1-10-4"; // The ID of the main datepicker division
+	this._jasperClass = "jr";
+	this._jasperPopupClass = "jr-jDatepickerPopupContainer";
 	//JASPERSOFT #3 END
 	this._inlineClass = "ui-datepicker-inline"; // The name of the inline marker class
 	this._appendClass = "ui-datepicker-append"; // The name of the append marker class
@@ -126,7 +130,7 @@ function Datepicker() {
 		disabled: false // The initial disabled state
 	};
 	$.extend(this._defaults, this.regional[""]);
-	this.dpDiv = bindHover($("<div id='" + this._mainDivId + "' class='jr-jDatepickerPopupContainer ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all jr'></div>"));
+	this.dpDiv = bindHover($("<div id='" + this._mainDivId + "' class='"+this._jasperPopupClass+" ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all "+this._jasperClass+"'></div>"));
 }
 
 $.extend(Datepicker.prototype, {
@@ -179,7 +183,9 @@ $.extend(Datepicker.prototype, {
 			drawMonth: 0, drawYear: 0, // month being drawn
 			inline: inline, // is datepicker inline or not
 			dpDiv: (!inline ? this.dpDiv : // presentation div
-			bindHover($("<div class='" + this._inlineClass + " ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all'></div>")))};
+			// JASPERSOFT #4
+			bindHover($("<div class='" + this._inlineClass + " ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all " + this._jasperClass + "'></div>")))};
+			// JASPERSOFT #4  END
 	},
 
 	/* Attach the date picker to an input field. */
@@ -761,7 +767,9 @@ $.extend(Datepicker.prototype, {
 		if (!inst.inline) {
 			showAnim = $.datepicker._get(inst, "showAnim");
 			duration = $.datepicker._get(inst, "duration");
-			inst.dpDiv.zIndex($(input).zIndex()+1);
+			// JASPERSOFT 5
+			inst.dpDiv.zIndex($(input).zIndex()+1002);
+			// JASPERSOFT 5 END
 			$.datepicker._datepickerShowing = true;
 
 			if ( $.effects && $.effects.effect[ showAnim ] ) {
