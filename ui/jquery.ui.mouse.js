@@ -17,13 +17,17 @@
 ///////////////////////////////////////////////////////////////////////
 // JASPERSOFT #1 add AMD-wrapper to head
 // JASPERSOFT #2 add AMD-wrapper to bottom
+// JASPERSOFT #3 JS-33242: adding fix for handling mouse up events in case of scrolling. Only IE case
 ///////////////////////////////////////////////////////////////////////
 
-//JASPERSOFT #1
+//JASPERSOFT #1 #3
 define(function(require) {
 
 	var $ = require("./jquery.ui.widget");
-//JASPERSOFT #1 END
+	var isIE = function () {
+		return navigator.appName === "Microsoft Internet Explorer" || navigator.userAgent.indexOf("Trident/") >= 0;
+	};
+//JASPERSOFT #1 #3 END
 
 
 var mouseHandled = false;
@@ -41,6 +45,14 @@ $.widget("ui.mouse", {
 	_mouseInit: function() {
 		var that = this;
 
+//JASPERSOFT #3
+	if (isIE()) {
+		this._mousePressed = false;
+		$(document).mousemove(this._mouseMove_IE_Fix.bind(this));
+		this.element.mousemove(this._mouseMove_IE_Fix.bind(this));
+	}
+//JASPERSOFT #3 END
+
 		this.element
 			.bind("mousedown."+this.widgetName, function(event) {
 				return that._mouseDown(event);
@@ -55,6 +67,15 @@ $.widget("ui.mouse", {
 
 		this.started = false;
 	},
+
+//JASPERSOFT #3
+	_mouseMove_IE_Fix: function () {
+		if (this._mousePressed) {
+			this._mouseUpDelegate();
+			this._mousePressed = false;
+		}
+	},
+//JASPERSOFT #3 END
 
 	// TODO: make sure destroying one instance of mouse doesn't mess with
 	// other instances of mouse
@@ -115,6 +136,12 @@ $.widget("ui.mouse", {
 		$(document)
 			.bind("mousemove."+this.widgetName, this._mouseMoveDelegate)
 			.bind("mouseup."+this.widgetName, this._mouseUpDelegate);
+
+//JASPERSOFT #3
+		if (isIE()) {
+			this._mousePressed = true;
+		}
+//JASPERSOFT #3 END
 
 		event.preventDefault();
 
