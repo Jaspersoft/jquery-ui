@@ -21,11 +21,136 @@
 ///////////////////////////////////////////////////////////////////////
 
 //JASPERSOFT #1 #3
-define(function(require) {
+define(function (require) {
 
 	var $ = require("./jquery.ui.widget");
+
 	var isIE = function () {
 		return navigator.appName === "Microsoft Internet Explorer" || navigator.userAgent.indexOf("Trident/") >= 0;
+	};
+
+	var detectedIEVersion = false;
+
+	var getScrollbarWidth = function () {
+		var outer = document.createElement("div");
+		outer.style.visibility = "hidden";
+		outer.style.width = "100px";
+		outer.style.msOverflowStyle = "scrollbar"; // needed for WinJS apps
+
+		document.body.appendChild(outer);
+
+		var widthNoScroll = outer.offsetWidth;
+		// force scrollbars
+		outer.style.overflow = "scroll";
+
+		// add innerdiv
+		var inner = document.createElement("div");
+		inner.style.width = "100%";
+		outer.appendChild(inner);
+
+		var widthWithScroll = inner.offsetWidth;
+
+		// remove divs
+		outer.parentNode.removeChild(outer);
+
+		return widthNoScroll - widthWithScroll;
+	};
+	var _detectedScrollbarSize = getScrollbarWidth();
+
+	var getIEVersion = function () {
+		var version = 0;
+		if (detectedIEVersion !== false) {
+			return detectedIEVersion;
+		}
+
+		if (this.isIE()) {
+			if (navigator.appName === "Netscape") {
+				var ua = navigator.userAgent;
+				var re = new RegExp("Trident/.*rv:([0-9]{1,}[\\.0-9]{0,})");
+				if (re.exec(ua) != null) {
+					version = parseFloat(RegExp.$1);
+				}
+			} else {
+				var msVersion = navigator.appVersion.split("MSIE")[1];
+				version = parseFloat(msVersion);
+			}
+		}
+
+		detectedIEVersion = version;
+		return version;
+	};
+
+	var isIE11 = function () {
+		return this.getIEVersion() === 11;
+	};
+	var inRect = function (rect, x, y) {
+		return (y >= rect.top && y <= rect.bottom) && (x >= rect.left && x <= rect.right);
+	};
+
+	var hasScroll = function ($element, axis) {
+		var overflow = $element.css("overflow"),
+			overflowAxis;
+
+		if (typeof axis === "undefined" || axis === "y") {
+			overflowAxis = $element.css("overflow-y");
+		} else {
+			overflowAxis = $element.css("overflow-x");
+		}
+
+		var bShouldScroll = $element.get(0).scrollHeight > $element.innerHeight();
+
+		var bAllowedScroll = (overflow === "auto" || overflow === "visible") ||
+			(overflowAxis === "auto" || overflowAxis === "visible");
+
+		var bOverrideScroll = overflow === "scroll" || overflowAxis === "scroll";
+
+		return (bShouldScroll && bAllowedScroll) || bOverrideScroll;
+	};
+
+	var inScrollRange = function (event) {
+
+		var
+			clickPointX = event.pageX,
+			clickPointY = event.pageY,
+			$element = $(event.target),
+			hasVerticalScroll = hasScroll($element),
+			hasHorizontalScroll = hasScroll($element, "x"),
+			horizontalScroll = null,
+			verticalScroll = null;
+
+		if (hasVerticalScroll) {
+			verticalScroll = {};
+			verticalScroll.top = $element.offset().top;
+			verticalScroll.right = $element.offset().left + $element.outerWidth();
+			verticalScroll.bottom = verticalScroll.top + $element.outerHeight();
+			verticalScroll.left = verticalScroll.right - _detectedScrollbarSize;
+
+			if (hasHorizontalScroll) {
+				//verticalScroll.bottom -= scrollSize;
+			}
+
+			if (inRect(verticalScroll, clickPointX, clickPointY)) {
+				return true;
+			}
+		}
+
+		if (hasHorizontalScroll) {
+			horizontalScroll = {};
+			horizontalScroll.bottom = $element.offset().top + $element.outerHeight();
+			horizontalScroll.left = $element.offset().left;
+			horizontalScroll.top = horizontalScroll.bottom - _detectedScrollbarSize;
+			horizontalScroll.right = horizontalScroll.left + $element.outerWidth();
+
+			if (hasVerticalScroll) {
+				//horizontalScroll.right -= scrollSize;
+			}
+
+			if (inRect(horizontalScroll, clickPointX, clickPointY)) {
+				return true;
+			}
+		}
+
+		return false;
 	};
 //JASPERSOFT #1 #3 END
 
@@ -46,11 +171,11 @@ $.widget("ui.mouse", {
 		var that = this;
 
 //JASPERSOFT #3
-	if (isIE()) {
-		this._mousePressed = false;
-		$(document).mousemove(this._mouseMove_IE_Fix.bind(this));
-		this.element.mousemove(this._mouseMove_IE_Fix.bind(this));
-	}
+		if (isIE11()) {
+			this._mousePressedOnScroll = false;
+			$(document).mousemove(this._mouseMove_IE_Fix.bind(this));
+			this.element.mousemove(this._mouseMove_IE_Fix.bind(this));
+		}
 //JASPERSOFT #3 END
 
 		this.element
@@ -70,9 +195,9 @@ $.widget("ui.mouse", {
 
 //JASPERSOFT #3
 	_mouseMove_IE_Fix: function () {
-		if (this._mousePressed) {
+		if (this._mousePressedOnScroll) {
 			this._mouseUpDelegate();
-			this._mousePressed = false;
+			this._mousePressedOnScroll = false;
 		}
 	},
 //JASPERSOFT #3 END
@@ -138,9 +263,11 @@ $.widget("ui.mouse", {
 			.bind("mouseup."+this.widgetName, this._mouseUpDelegate);
 
 //JASPERSOFT #3
-		if (isIE()) {
-			this._mousePressed = true;
-		}
+            if (isIE11()) {
+                if (inScrollRange(event)) {
+                    this._mousePressedOnScroll = true;
+                }
+            }
 //JASPERSOFT #3 END
 
 		event.preventDefault();
