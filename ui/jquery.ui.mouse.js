@@ -21,112 +21,137 @@
 ///////////////////////////////////////////////////////////////////////
 
 //JASPERSOFT #1 #3
-define(function(require) {
+define(function (require) {
 
-    var $ = require("./jquery.ui.widget");
+	var $ = require("./jquery.ui.widget");
 
-    var isIE = function () {
-        return navigator.appName === "Microsoft Internet Explorer" || navigator.userAgent.indexOf("Trident/") >= 0;
-    };
+	var isIE = function () {
+		return navigator.appName === "Microsoft Internet Explorer" || navigator.userAgent.indexOf("Trident/") >= 0;
+	};
 
-    var detectedIEVersion = false;
+	var detectedIEVersion = false;
 
-    var getIEVersion = function () {
-        var version = 0;
-        if (detectedIEVersion !== false) {
-            return detectedIEVersion;
-        }
+	var getScrollbarWidth = function () {
+		var outer = document.createElement("div");
+		outer.style.visibility = "hidden";
+		outer.style.width = "100px";
+		outer.style.msOverflowStyle = "scrollbar"; // needed for WinJS apps
 
-        if (this.isIE()) {
-            if (navigator.appName === "Netscape") {
-                var ua = navigator.userAgent;
-                var re = new RegExp("Trident/.*rv:([0-9]{1,}[\\.0-9]{0,})");
-                if (re.exec(ua) != null) {
-                    version = parseFloat(RegExp.$1);
-                }
-            } else {
-                var msVersion = navigator.appVersion.split("MSIE")[1];
-                version = parseFloat(msVersion);
-            }
-        }
+		document.body.appendChild(outer);
 
-        detectedIEVersion = version;
-        return version;
-    };
+		var widthNoScroll = outer.offsetWidth;
+		// force scrollbars
+		outer.style.overflow = "scroll";
 
-    var isIE11 = function () {
-        return this.getIEVersion() === 11;
-    };
-    var inRect = function (rect, x, y) {
-        return (y >= rect.top && y <= rect.bottom) && (x >= rect.left && x <= rect.right);
-    };
+		// add innerdiv
+		var inner = document.createElement("div");
+		inner.style.width = "100%";
+		outer.appendChild(inner);
 
-    var hasScroll = function ($element, axis) {
-        var overflow = $element.css("overflow"),
-            overflowAxis;
+		var widthWithScroll = inner.offsetWidth;
 
-        if (typeof axis === "undefined" || axis === "y") {
-            overflowAxis = $element.css("overflow-y");
-        } else {
-            overflowAxis = $element.css("overflow-x");
-        }
+		// remove divs
+		outer.parentNode.removeChild(outer);
 
-        var bShouldScroll = $element.get(0).scrollHeight > $element.innerHeight();
+		return widthNoScroll - widthWithScroll;
+	};
 
-        var bAllowedScroll = (overflow === "auto" || overflow === "visible") ||
-            (overflowAxis === "auto" || overflowAxis === "visible");
+	var getIEVersion = function () {
+		var version = 0;
+		if (detectedIEVersion !== false) {
+			return detectedIEVersion;
+		}
 
-        var bOverrideScroll = overflow === "scroll" || overflowAxis === "scroll";
+		if (this.isIE()) {
+			if (navigator.appName === "Netscape") {
+				var ua = navigator.userAgent;
+				var re = new RegExp("Trident/.*rv:([0-9]{1,}[\\.0-9]{0,})");
+				if (re.exec(ua) != null) {
+					version = parseFloat(RegExp.$1);
+				}
+			} else {
+				var msVersion = navigator.appVersion.split("MSIE")[1];
+				version = parseFloat(msVersion);
+			}
+		}
 
-        return (bShouldScroll && bAllowedScroll) || bOverrideScroll;
-    };
+		detectedIEVersion = version;
+		return version;
+	};
 
-    var inScrollRange = function (event) {
+	var isIE11 = function () {
+		return this.getIEVersion() === 11;
+	};
+	var inRect = function (rect, x, y) {
+		return (y >= rect.top && y <= rect.bottom) && (x >= rect.left && x <= rect.right);
+	};
 
-        var
-            scrollSize = 18,
-            clickPointX = event.pageX,
-            clickPointY = event.pageY,
-            $element = $(event.target),
-            hasVerticalScroll = hasScroll($element),
-            hasHorizontalScroll = hasScroll($element, "x"),
-            horizontalScroll = null,
-            verticalScroll = null;
+	var hasScroll = function ($element, axis) {
+		var overflow = $element.css("overflow"),
+			overflowAxis;
 
-        if (hasVerticalScroll) {
-            verticalScroll = {};
-            verticalScroll.top = $element.offset().top;
-            verticalScroll.right = $element.offset().left + $element.outerWidth();
-            verticalScroll.bottom = verticalScroll.top + $element.outerHeight();
-            verticalScroll.left = verticalScroll.right - scrollSize;
+		if (typeof axis === "undefined" || axis === "y") {
+			overflowAxis = $element.css("overflow-y");
+		} else {
+			overflowAxis = $element.css("overflow-x");
+		}
 
-            if (hasHorizontalScroll) {
-                //verticalScroll.bottom -= scrollSize;
-            }
+		var bShouldScroll = $element.get(0).scrollHeight > $element.innerHeight();
 
-            if (inRect(verticalScroll, clickPointX, clickPointY)) {
-                return true;
-            }
-        }
+		var bAllowedScroll = (overflow === "auto" || overflow === "visible") ||
+			(overflowAxis === "auto" || overflowAxis === "visible");
 
-        if (hasHorizontalScroll) {
-            horizontalScroll = {};
-            horizontalScroll.bottom = $element.offset().top + $element.outerHeight();
-            horizontalScroll.left = $element.offset().left;
-            horizontalScroll.top = horizontalScroll.bottom - scrollSize;
-            horizontalScroll.right = horizontalScroll.left + $element.outerWidth();
+		var bOverrideScroll = overflow === "scroll" || overflowAxis === "scroll";
 
-            if (hasVerticalScroll) {
-                //horizontalScroll.right -= scrollSize;
-            }
+		return (bShouldScroll && bAllowedScroll) || bOverrideScroll;
+	};
 
-            if (inRect(horizontalScroll, clickPointX, clickPointY)) {
-                return true;
-            }
-        }
+	var inScrollRange = function (event) {
 
-        return false;
-    };
+		var
+			scrollSize = getScrollbarWidth(),
+			clickPointX = event.pageX,
+			clickPointY = event.pageY,
+			$element = $(event.target),
+			hasVerticalScroll = hasScroll($element),
+			hasHorizontalScroll = hasScroll($element, "x"),
+			horizontalScroll = null,
+			verticalScroll = null;
+
+		if (hasVerticalScroll) {
+			verticalScroll = {};
+			verticalScroll.top = $element.offset().top;
+			verticalScroll.right = $element.offset().left + $element.outerWidth();
+			verticalScroll.bottom = verticalScroll.top + $element.outerHeight();
+			verticalScroll.left = verticalScroll.right - scrollSize;
+
+			if (hasHorizontalScroll) {
+				//verticalScroll.bottom -= scrollSize;
+			}
+
+			if (inRect(verticalScroll, clickPointX, clickPointY)) {
+				return true;
+			}
+		}
+
+		if (hasHorizontalScroll) {
+			horizontalScroll = {};
+			horizontalScroll.bottom = $element.offset().top + $element.outerHeight();
+			horizontalScroll.left = $element.offset().left;
+			horizontalScroll.top = horizontalScroll.bottom - scrollSize;
+			horizontalScroll.right = horizontalScroll.left + $element.outerWidth();
+
+			if (hasVerticalScroll) {
+				//horizontalScroll.right -= scrollSize;
+			}
+
+			if (inRect(horizontalScroll, clickPointX, clickPointY)) {
+				return true;
+			}
+		}
+
+		return false;
+	};
 //JASPERSOFT #1 #3 END
 
 
