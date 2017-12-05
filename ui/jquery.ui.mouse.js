@@ -55,6 +55,7 @@ define(function (require) {
 
 		return widthNoScroll - widthWithScroll;
 	};
+	var _detectedScrollbarSize = getScrollbarWidth();
 
 	var getIEVersion = function () {
 		var version = 0;
@@ -109,7 +110,6 @@ define(function (require) {
 	var inScrollRange = function (event) {
 
 		var
-			scrollSize = getScrollbarWidth(),
 			clickPointX = event.pageX,
 			clickPointY = event.pageY,
 			$element = $(event.target),
@@ -123,7 +123,7 @@ define(function (require) {
 			verticalScroll.top = $element.offset().top;
 			verticalScroll.right = $element.offset().left + $element.outerWidth();
 			verticalScroll.bottom = verticalScroll.top + $element.outerHeight();
-			verticalScroll.left = verticalScroll.right - scrollSize;
+			verticalScroll.left = verticalScroll.right - _detectedScrollbarSize;
 
 			if (hasHorizontalScroll) {
 				//verticalScroll.bottom -= scrollSize;
@@ -138,7 +138,7 @@ define(function (require) {
 			horizontalScroll = {};
 			horizontalScroll.bottom = $element.offset().top + $element.outerHeight();
 			horizontalScroll.left = $element.offset().left;
-			horizontalScroll.top = horizontalScroll.bottom - scrollSize;
+			horizontalScroll.top = horizontalScroll.bottom - _detectedScrollbarSize;
 			horizontalScroll.right = horizontalScroll.left + $element.outerWidth();
 
 			if (hasVerticalScroll) {
