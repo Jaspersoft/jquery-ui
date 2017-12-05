@@ -57,13 +57,6 @@ define(function(require) {
     var isIE11 = function () {
         return this.getIEVersion() === 11;
     };
-    var RECT = function () {
-        this.top = 0;
-        this.left = 0;
-        this.bottom = 0;
-        this.right = 0;
-    };
-
     var inRect = function (rect, x, y) {
         return (y >= rect.top && y <= rect.bottom) && (x >= rect.left && x <= rect.right);
     };
@@ -101,7 +94,7 @@ define(function(require) {
             verticalScroll = null;
 
         if (hasVerticalScroll) {
-            verticalScroll = new RECT();
+            verticalScroll = {};
             verticalScroll.top = $element.offset().top;
             verticalScroll.right = $element.offset().left + $element.outerWidth();
             verticalScroll.bottom = verticalScroll.top + $element.outerHeight();
@@ -117,7 +110,7 @@ define(function(require) {
         }
 
         if (hasHorizontalScroll) {
-            horizontalScroll = new RECT();
+            horizontalScroll = {};
             horizontalScroll.bottom = $element.offset().top + $element.outerHeight();
             horizontalScroll.left = $element.offset().left;
             horizontalScroll.top = horizontalScroll.bottom - scrollSize;
