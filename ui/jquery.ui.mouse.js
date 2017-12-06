@@ -63,7 +63,7 @@ define(function (require) {
 			return detectedIEVersion;
 		}
 
-		if (this.isIE()) {
+		if (isIE()) {
 			if (navigator.appName === "Netscape") {
 				var ua = navigator.userAgent;
 				var re = new RegExp("Trident/.*rv:([0-9]{1,}[\\.0-9]{0,})");
@@ -81,7 +81,7 @@ define(function (require) {
 	};
 
 	var isIE11 = function () {
-		return this.getIEVersion() === 11;
+		return getIEVersion() === 11;
 	};
 	var inRect = function (rect, x, y) {
 		return (y >= rect.top && y <= rect.bottom) && (x >= rect.left && x <= rect.right);
